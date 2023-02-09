@@ -47,7 +47,7 @@ function intersectionArray(elementsArray1, elementsArray2)
         if (elementsArray2.includes(elementsArray1[i]) != 0)
             resultArray[resultArray.length] = elementsArray1[i];
     }
-    return "Пересечение массивов: [" + resultArray + "]"
+    return "Пересечение массивов: [" + resultArray.join(", ") + "]"
 }
 
 /**
@@ -103,11 +103,15 @@ function main()
         document.getElementById('result').innerHTML = "Результат рассчета:<br>"
         document.getElementById('result').innerHTML += unionArray(mas1, mas2, 1) + "<br>"
         document.getElementById('result').innerHTML += intersectionArray(mas2, mas2) + "<br>"
-        diffAB = diffArray(mas1, mas2, 0)
-        diffBA = diffArray(mas2, mas1, 1)
-        document.getElementById('result').innerHTML += "Разность массива типа " + "A/B" + ": [" + diffAB + "]" + "<br>"
-        document.getElementById('result').innerHTML += "Разность массива типа " + "B/A" + ": [" + diffBA + "]" + "<br>"
-        document.getElementById('result').innerHTML += "Симметрическая разность массивов: [" + unionArray(diffAB, diffBA, 0) + "] <br>"
+        let diffAB = diffArray(mas1, mas2, 0)
+        let diffBA = diffArray(mas2, mas1, 1)
+        mas1 = null
+        mas2 = null
+        document.getElementById('result').innerHTML += "Разность массива типа " + "A/B" + ": [" + diffAB.join(", ") + "]" + "<br>"
+        document.getElementById('result').innerHTML += "Разность массива типа " + "B/A" + ": [" + diffBA.join(", ") + "]" + "<br>"
+        document.getElementById('result').innerHTML += "Симметрическая разность массивов: [" + unionArray(diffAB, diffBA, 0).join(", ") + "] <br>"
+        diffAB = null
+        diffBA = null
     }
     else {
         document.getElementById('result').innerHTML = strError
