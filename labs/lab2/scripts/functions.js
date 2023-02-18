@@ -9,6 +9,37 @@ function validateElement(element)
 }
 
 /**
+ * Перестановки
+ * @param n
+ * @param x
+ */
+
+let curr = [];
+let used = [];
+let sizeForPerm = 0;
+let perms = [];
+
+function permutations(n, x) {
+    if (x == n) {
+        let res = [];
+        for (let i = 0; i < n; ++i) {
+            res[res.length] = curr[i];
+        }
+        perms[perms.length] = res;
+        return;
+    }
+    for (let i = 0; i < sizeForPerm; ++i) {
+        if (used[i] == undefined) {
+            used[i] = 1;
+            curr[x] = i;
+            permutations(n, x + 1);
+            curr[x] = 0;
+            used[i] = 0;
+        }
+    }
+}
+
+/**
  * Проверка на рефлексивность
  * @returns {boolean}
  * @param mp
@@ -109,21 +140,31 @@ function isTransitive(mp, isText) {
         tmp[tmp.length] = key;
     }
     let res = true;
-    for (let u of mp.keys()) {
-        for (let v of mp.keys()) {
-            for (let w of mp.keys()) {
-                tmpSet = new Set();
-                tmpSet.add(v);
-                tmpSet.add(w);
-                tmpSet.add(u);
-                if (tmpSet.size === 3) {
-                    if ((mp.get(u).has(v) && mp.get(v).has(w)) && !(mp.get(u).has(w))) {
-                        res = false;
-                    }
-                }
-            }
+
+    curr = [];
+    used = [];
+    sizeForPerm = tmp.length;
+    perms = [];
+    permutations(3, 0);
+
+    for (let perm of perms) {
+        tmpSet = new Set();
+        let u = tmp[perm[0]];
+        let v = tmp[perm[1]];
+        let w = tmp[perm[2]];
+        tmpSet.add(v);
+        tmpSet.add(w);
+        tmpSet.add(u);
+        if ((mp.get(u).has(v) && mp.get(v).has(w)) && !(mp.get(u).has(w))) {
+            res = false;
         }
     }
+
+    curr = null;
+    used = null;
+    sizeForPerm = null;
+    perms = null;
+
     if (isText === 1) {
         let tmp = "";
         if (!res)
@@ -131,6 +172,7 @@ function isTransitive(mp, isText) {
         tmp += "транзитивная";
         res = tmp;
     }
+
     return res;
 }
 
