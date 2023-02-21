@@ -118,4 +118,7 @@ function main() {
             document.getElementById("result").innerHTML += "не ";
         document.getElementById("result").innerHTML += "являются функцией <br>";
     }
+    masA = null;
+    masB = null;
+    masOfMas = null;
 }
