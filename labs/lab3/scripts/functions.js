@@ -5,37 +5,47 @@
  * @param masOfMas
  */
 function validateElement(masA, masB, masOfMas) {
-    let is_valid = true;
+    let isValid = true;
 
     if (masA.length != new Set(masA).size) {
         document.getElementById("result").innerHTML += "Массив X содержит повторения <br>";
-        is_valid = false;
+        isValid = false;
     }
 
     if (masB.length != new Set(masB).size) {
         document.getElementById("result").innerHTML += "Массив Y содержит повторения <br>";
-        is_valid = false;
+        isValid = false;
     }
 
     if (masOfMas.length != masB.length) {
         document.getElementById("result").innerHTML += "Количество строк матрицы смежности не совпадает с массивами <br>";
-        is_valid = false;
+        isValid = false;
     }
 
     if (masOfMas[0].split(" ").length != masA.length) {
         document.getElementById("result").innerHTML += "Количество столбцов матрицы смежности не совпадает с массивами <br>";
-        is_valid = false;
+        isValid = false;
     }
-
+    let isNum = true;
     for (let i = 0; i < masOfMas.length; ++i) {
         let elem = masOfMas[i].split(" ");
         if (elem.length != masA.length) {
             document.getElementById("result").innerHTML += "Неверное количество элементов в " + (i + 1) + " строке <br>";
-            is_valid = false;
+            isValid = false;
+        }
+        if (isNum) {
+            for (let sym of elem) {
+                if (!(sym == 0 || sym == 1)) {
+                    document.getElementById("result").innerHTML += "Матрица смежности должна содержать только 0 и 1 <br>";
+                    isNum = false;
+                    isValid = false;
+                    break;
+                }
+            }
         }
     }
 
-    return is_valid;
+    return isValid;
 }
 
 /**
