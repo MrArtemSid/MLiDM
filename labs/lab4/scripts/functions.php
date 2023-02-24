@@ -67,6 +67,7 @@ function main(): void
             $g[] = new \Ds\Vector();
 			if ($i != $j) {
                 $g[$i][] = new edge($i, $j, $masTmp[$j]);
+                $g[$j][] = new edge($j, $i, $masTmp[$j]);
             }
 		}
 	}
