@@ -4,16 +4,6 @@ if(isset($_POST['button1'])) {
     main();
 }
 
-class edge {
-    public int $from, $to, $weight;
-    public function __construct($from, $to, $weight)
-    {
-        $this->from = $from;
-        $this->to = $to;
-        $this->weight = $weight;
-    }
-};
-
 function validation($mas, $masOfMas, $start, $end): bool {
     $res = true;
     $isNum = true;
@@ -43,17 +33,17 @@ function validation($mas, $masOfMas, $start, $end): bool {
     return $res;
 }
 
-function main(): void
-{
-    $mas = $_POST['mas'];
-    $start = $_POST['start'];
-    $end = $_POST['end'];
-    $mas = explode(" ", $mas);
-    $masOfMas = $_POST['masOfMas'];
-    $masOfMas = explode("\n", $masOfMas);
+function dijkstra($mas, $masOfMas, $start, $end): void {
 
-    if (!validation($mas, $masOfMas, $start, $end))
-        return;
+    class edge {
+        public int $from, $to, $weight;
+        public function __construct($from, $to, $weight)
+        {
+            $this->from = $from;
+            $this->to = $to;
+            $this->weight = $weight;
+        }
+    };
 
     $g = array();
 
@@ -65,12 +55,12 @@ function main(): void
         $masTmp = explode(" ", $masOfMas[$i]);
         for ($j = 0; $j < sizeof($mas); ++$j) {
             $g[] = new \Ds\Vector();
-			if ($i != $j) {
+            if ($i != $j) {
                 $g[$i][] = new edge($i, $j, $masTmp[$j]);
                 $g[$j][] = new edge($j, $i, $masTmp[$j]);
             }
-		}
-	}
+        }
+    }
 
     $empty = INF;
     $dist = array_fill(0, sizeof($mas), $empty);
@@ -81,25 +71,25 @@ function main(): void
     $parent[$start] = -1;
     for ($ind = 0; $ind < sizeof($mas); ++$ind) {
         $v = -1;
-		for ($i = 0; $i < sizeof($mas); ++$i) {
+        for ($i = 0; $i < sizeof($mas); ++$i) {
             if (!$used[$i] && ($v == -1 || $dist[$i] < $dist[$v])) {
                 $v = $i;
             }
         }
-		if ($dist[$v] == $empty) {
+        if ($dist[$v] == $empty) {
             break;
         }
-		$used[$v] = 1;
+        $used[$v] = 1;
         foreach ($g[$v] as $i) {
             if ($dist[$v] + $i->weight < $dist[$i->to]) {
                 $dist[$i->to] = $dist[$v] + $i->weight;
                 $parent[$i->to] = $v;
             }
         }
-	}
+    }
 
     if ($dist[$end] == $empty) {
-        echo "Не существует путей между этими вершинами";
+        echo "Не существует путей между этими вершинами<br>";
         return;
     }
     echo "Стоимость кратчайшего пути:<br>", $dist[$end], "<br>";
@@ -115,5 +105,22 @@ function main(): void
             echo " -> ";
         echo ($mas[$way[$i]]);
     }
+}
+
+function main(): void
+{
+    $mas = $_POST['mas'];
+    $start = $_POST['start'];
+    $end = $_POST['end'];
+    $mas = explode(" ", $mas);
+    $masOfMas = $_POST['masOfMas'];
+    $masOfMas = explode("\n", $masOfMas);
+
+    if (!validation($mas, $masOfMas, $start, $end))
+        return;
+
+    dijkstra($mas, $masOfMas, $start, $end);
+
+    unset($mas, $masOfMas, $start, $end);
 }
 ?>
