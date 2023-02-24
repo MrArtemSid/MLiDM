@@ -55,7 +55,7 @@ function dijkstra($mas, $masOfMas, $start, $end): void {
         $masTmp = explode(" ", $masOfMas[$i]);
         for ($j = 0; $j < sizeof($mas); ++$j) {
             $g[] = new \Ds\Vector();
-            if ($i != $j) {
+            if ($masTmp[$j] != -1 && $i != $j) {
                 $g[$i][] = new edge($i, $j, $masTmp[$j]);
                 $g[$j][] = new edge($j, $i, $masTmp[$j]);
             }
