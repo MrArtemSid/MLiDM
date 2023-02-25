@@ -13,7 +13,8 @@
             <input type="text" name="start" value="<?php echo $_POST['start']; ?>"><br>
             Введите конечную вершину<br>
             <input type="text" name="end" value="<?php echo $_POST['end']; ?>"><br>
-            Введите матрицу смежности:<br>
+            Введите весовую матрицу:<br>
+            <small>(-1 при отсутствии пути, 0 по главной диагонали)<br></small>
             <textarea type="text" name="masOfMas" id="id_masOfMas"><?php echo $_POST['masOfMas']; ?></textarea><br>
             <br>
             <input type="submit" name="button1" class="button" value="Рассчитать значения" />
