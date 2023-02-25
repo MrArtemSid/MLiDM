@@ -4,10 +4,15 @@ if(isset($_POST['button1'])) {
     main();
 }
 
-function validation($mas, $masOfMas, $start, $end): bool {
+$masOfMas = array();
+$comps = array();
+$used = array();
+
+function validation($mas, $start, $end): bool {
     $res = true;
     $isNum = true;
     $isZero = true;
+    global $masOfMas;
 
     if(sizeof($mas) != sizeof(array_unique($mas))) {
         $res = false;
@@ -15,18 +20,18 @@ function validation($mas, $masOfMas, $start, $end): bool {
     }
 
     for ($i = 0; $i < sizeof($mas); ++$i) {
-        $masTmp = explode(" ", $masOfMas[$i]);
-        if ($masTmp[$i]) {
+        $masOfMas[$i] = explode(" ", $masOfMas[$i]);
+        if ($masOfMas[$i][$i]) {
             $isZero = false;
             $res = false;
         }
-        for ($j = 0; $j < sizeof($masTmp); ++$j) {
-            if (!is_numeric($masTmp[$j]) || $masTmp[$j] < -1) {
+        for ($j = 0; $j < sizeof($masOfMas[$i]); ++$j) {
+            if (!is_numeric($masOfMas[$i][$j]) || $masOfMas[$i][$j] < -1) {
                 $isNum = false;
                 $res = false;
             }
         }
-        if (sizeof($masTmp) != sizeof($mas)) {
+        if (sizeof($masOfMas[$i]) != sizeof($mas)) {
             echo "Неверное количество элементов в ", ($i + 1), " строке <br>";
             $res = false;
         }
@@ -41,7 +46,7 @@ function validation($mas, $masOfMas, $start, $end): bool {
     return $res;
 }
 
-function dijkstra($mas, $masOfMas, $start, $end): void {
+function dijkstra($mas, $start, $end): void {
 
     class edge {
         public int $from, $to, $weight;
@@ -54,18 +59,17 @@ function dijkstra($mas, $masOfMas, $start, $end): void {
     };
 
     $g = array();
+    global $masOfMas;
 
     for ($i = 0; $i < sizeof($mas); ++$i) {
         if ($mas[$i] == $start)
             $start = $i;
         if ($mas[$i] == $end)
             $end = $i;
-        $masTmp = explode(" ", $masOfMas[$i]);
         for ($j = 0; $j < sizeof($mas); ++$j) {
-            $g[] = new \Ds\Vector();
-            if ($masTmp[$j] != -1 && $i != $j) {
-                $g[$i][] = new edge($i, $j, $masTmp[$j]);
-                $g[$j][] = new edge($j, $i, $masTmp[$j]);
+            if ($masOfMas[$i][$j] != -1 && $i != $j) {
+                $g[$i][] = new edge($i, $j, $masOfMas[$i][$j]);
+                $g[$j][] = new edge($j, $i, $masOfMas[$i][$j]);
             }
         }
     }
@@ -116,36 +120,35 @@ function dijkstra($mas, $masOfMas, $start, $end): void {
     echo "<br>";
 }
 
-$comps = array();
-$used = array();
-
-function dfs($v, $graph): void {
+function dfs($v): void {
+    global $masOfMas;
     global $comps;
     global $used;
     $used[$v] = true;
     $comps[sizeof($comps) - 1][] = $v;
-    for ($u = 0; $u < sizeof($graph); ++$u) {
-        if (!$used[$u] && ($graph[$v][$u] > 0 || $graph[$u][$v] > 0)) {
-            dfs($u, $graph);
+    for ($u = 0; $u < sizeof($masOfMas); ++$u) {
+        if (!$used[$u] && ($masOfMas[$v][$u] > 0 || $masOfMas[$u][$v] > 0)) {
+            dfs($u);
         }
     }
 }
 
-function find_comps($graph): void {
+function find_comps(): void {
+    global $masOfMas;
     global $comps;
     global $used;
-    $used = array_fill(0, sizeof($graph), 0);
+    $used = array_fill(0, sizeof($masOfMas), 0);
     $ans = array();
-    for ($i = 0; $i < sizeof($graph); ++$i) {
+    for ($i = 0; $i < sizeof($masOfMas); ++$i) {
         if (!$used[$i]) {
             $comps[] = [];
-            dfs($i, $graph);
+            dfs($i, $masOfMas);
         }
         $ans[] = array();
     }
 
     foreach ($comps as $comp) {
-        $tmp = array_fill(0, sizeof($graph), 0);
+        $tmp = array_fill(0, sizeof($masOfMas), 0);
         foreach ($comp as $v) {
             $tmp[$v] = 1;
         }
@@ -155,8 +158,8 @@ function find_comps($graph): void {
         }
     }
     echo "Матрица достижимости:<br>";
-    for ($i = 0; $i < sizeof($graph); $i++) {
-        for ($j = 0; $j < sizeof($graph); $j++) {
+    for ($i = 0; $i < sizeof($masOfMas); $i++) {
+        for ($j = 0; $j < sizeof($masOfMas); $j++) {
             echo $ans[$i][$j], " ";
         }
         echo "<br>";
@@ -169,14 +172,15 @@ function main(): void
     $start = $_POST['start'];
     $end = $_POST['end'];
     $mas = explode(" ", $mas);
+    global $masOfMas;
     $masOfMas = $_POST['masOfMas'];
     $masOfMas = explode("\n", $masOfMas);
 
-    if (!validation($mas, $masOfMas, $start, $end))
+    if (!validation($mas, $start, $end))
         return;
 
-    dijkstra($mas, $masOfMas, $start, $end);
-    find_comps($masOfMas);
+    dijkstra($mas, $start, $end);
+    find_comps();
 
     unset($mas, $masOfMas, $start, $end, $comps, $used);
 }
