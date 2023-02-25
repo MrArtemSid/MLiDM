@@ -7,6 +7,7 @@ if(isset($_POST['button1'])) {
 function validation($mas, $masOfMas, $start, $end): bool {
     $res = true;
     $isNum = true;
+    $isZero = true;
 
     if(sizeof($mas) != sizeof(array_unique($mas))) {
         $res = false;
@@ -15,6 +16,10 @@ function validation($mas, $masOfMas, $start, $end): bool {
 
     for ($i = 0; $i < sizeof($mas); ++$i) {
         $masTmp = explode(" ", $masOfMas[$i]);
+        if ($masTmp[$i][$i]) {
+            $isZero = false;
+            $res = false;
+        }
         for ($j = 0; $j < sizeof($masTmp); ++$j) {
             if (!is_numeric($masTmp[$j]) || $masTmp[$j] < -1) {
                 $isNum = false;
@@ -29,6 +34,9 @@ function validation($mas, $masOfMas, $start, $end): bool {
 
     if (!$isNum)
         echo "Матрица смежности может содержать только числа [-1; +inf) <br>";
+
+    if (!$isZero)
+        echo "Главная диагональ матрицы может иметь только нули<br>";
 
     return $res;
 }
