@@ -16,7 +16,7 @@ function validation($mas, $masOfMas, $start, $end): bool {
 
     for ($i = 0; $i < sizeof($mas); ++$i) {
         $masTmp = explode(" ", $masOfMas[$i]);
-        if ($masTmp[$i][$i]) {
+        if ($masTmp[$i]) {
             $isZero = false;
             $res = false;
         }
