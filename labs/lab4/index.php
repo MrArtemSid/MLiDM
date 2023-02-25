@@ -8,16 +8,16 @@
         <h2>Вариант №14: неориентированный, матрицей</h2>
         <form action="" method="POST">
             Введите множество вершин через пробел<br>
-            <input type="text" name="mas" value=""><br>
+            <input type="text" name="mas" value="<?php echo $_POST['mas']; ?>"><br>
             Введите начальную вершину<br>
-            <input type="text" name="start" value=""><br>
+            <input type="text" name="start" value="<?php echo $_POST['start']; ?>"><br>
             Введите конечную вершину<br>
-            <input type="text" name="end" value=""><br>
+            <input type="text" name="end" value="<?php echo $_POST['end']; ?>"><br>
             Введите матрицу смежности:<br>
-            <textarea type="text" name="masOfMas" id="id_masOfMas" value=""></textarea><br>
+            <textarea type="text" name="masOfMas" id="id_masOfMas"><?php echo $_POST['masOfMas']; ?></textarea><br>
             <br>
             <input type="submit" name="button1" class="button" value="Рассчитать значения" />
-            <input type="submit" name="button2" class="button" value="Очистить" />
+            <input type="button" name="button2" class="button_active" onclick="location.href=''" value="Очистить"  />
         </form>
         <br><br>
         <div id="result">
