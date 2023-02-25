@@ -16,7 +16,7 @@ function validation($mas, $masOfMas, $start, $end): bool {
     for ($i = 0; $i < sizeof($mas); ++$i) {
         $masTmp = explode(" ", $masOfMas[$i]);
         for ($j = 0; $j < sizeof($masTmp); ++$j) {
-            if (!is_numeric($masTmp[$j])) {
+            if (!is_numeric($masTmp[$j]) || $masTmp[$j] < -1) {
                 $isNum = false;
                 $res = false;
             }
@@ -28,7 +28,7 @@ function validation($mas, $masOfMas, $start, $end): bool {
     }
 
     if (!$isNum)
-        echo "Матрица смежности может содержать только числа<br>";
+        echo "Матрица смежности может содержать только числа [-1; +inf) <br>";
 
     return $res;
 }
