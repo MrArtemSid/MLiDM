@@ -89,7 +89,7 @@ function dijkstra($mas, $masOfMas, $start, $end): void {
     }
 
     if ($dist[$end] == $empty) {
-        echo "Не существует путей между этими вершинами<br>";
+        echo "Не существует путей между этими вершинами<br><br>";
         return;
     }
     echo "Стоимость кратчайшего пути:<br>", $dist[$end], "<br>";
@@ -104,6 +104,54 @@ function dijkstra($mas, $masOfMas, $start, $end): void {
         if ($i != sizeof($way) - 1)
             echo " -> ";
         echo ($mas[$way[$i]]);
+    }
+    echo "<br>";
+}
+
+$comps = array();
+$used = array();
+
+function dfs($v, $graph): void {
+    global $comps;
+    global $used;
+    $used[$v] = true;
+    $comps[sizeof($comps) - 1][] = $v;
+    for ($u = 0; $u < sizeof($graph); ++$u) {
+        if (!$used[$u] && ($graph[$v][$u] > 0 || $graph[$u][$v] > 0)) {
+            dfs($u, $graph);
+        }
+    }
+}
+
+function find_comps($graph): void {
+    global $comps;
+    global $used;
+    $used = array_fill(0, sizeof($graph), 0);
+    $ans = array();
+    for ($i = 0; $i < sizeof($graph); ++$i) {
+        if (!$used[$i]) {
+            $comps[] = [];
+            dfs($i, $graph);
+        }
+        $ans[] = array();
+    }
+
+    foreach ($comps as $comp) {
+        $tmp = array_fill(0, sizeof($graph), 0);
+        foreach ($comp as $v) {
+            $tmp[$v] = 1;
+        }
+        foreach ($comp as $v) {
+            $ans[$v] = $tmp;
+            $ans[$v][$v] = 0;
+        }
+    }
+    echo "Матрица достижимости:<br>";
+    for ($i = 0; $i < sizeof($graph); $i++) {
+        for ($j = 0; $j < sizeof($graph); $j++) {
+            echo $ans[$i][$j], " ";
+        }
+        echo "<br>";
     }
 }
 
@@ -120,7 +168,8 @@ function main(): void
         return;
 
     dijkstra($mas, $masOfMas, $start, $end);
+    find_comps($masOfMas);
 
-    unset($mas, $masOfMas, $start, $end);
+    unset($mas, $masOfMas, $start, $end, $comps, $used);
 }
 ?>
