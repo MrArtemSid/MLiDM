@@ -1,4 +1,7 @@
 <?php
+/**
+ * Запуск скрипта от нажатия кнопки
+ */
 if(isset($_POST['button1'])) {
     echo "Результат выполнения:<br><br>";
     main();
@@ -8,6 +11,13 @@ $masOfMas = array();
 $comps = array();
 $used = array();
 
+/**
+ * Валидация параметров ввода
+ * @param $mas
+ * @param $start
+ * @param $end
+ * @return bool
+ */
 function validation($mas, $start, $end): bool {
     $res = true;
     $isNum = true;
@@ -46,6 +56,13 @@ function validation($mas, $start, $end): bool {
     return $res;
 }
 
+/**
+ * Применение алгоритма дейкстры для нахождения кратчейшего пути в графе и его стоимости
+ * @param $mas
+ * @param $start
+ * @param $end
+ * @return void
+ */
 function dijkstra($mas, $start, $end): void {
 
     class edge {
@@ -120,6 +137,11 @@ function dijkstra($mas, $start, $end): void {
     echo "<br>";
 }
 
+/**
+ * Обход графа в глубину с добавлением вершин в компоненту связности
+ * @param $v
+ * @return void
+ */
 function dfs($v): void {
     global $masOfMas;
     global $comps;
@@ -133,6 +155,10 @@ function dfs($v): void {
     }
 }
 
+/**
+ * Нахождение компонент связности через DFS и построение на них матрицы достижимости
+ * @return void
+ */
 function find_comps(): void {
     global $masOfMas;
     global $comps;
@@ -166,6 +192,10 @@ function find_comps(): void {
     }
 }
 
+/**
+ * Основная функция
+ * @return void
+ */
 function main(): void
 {
     $mas = $_POST['mas'];
