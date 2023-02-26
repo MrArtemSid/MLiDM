@@ -121,7 +121,7 @@ function dijkstra($mas, $start, $end): void {
         echo "Не существует путей между этими вершинами<br><br>";
         return;
     }
-    echo "Стоимость кратчайшего пути:<br>", $dist[$end], "<br>";
+    echo "Стоимость кратчайшего пути:<br>", $dist[$end], "<br><br>";
     echo "Путь из ", $mas[$start], " в ", $mas[$end], ":<br>";
     $way = array();
     while ($end != -1) {
@@ -134,7 +134,7 @@ function dijkstra($mas, $start, $end): void {
             echo " -> ";
         echo ($mas[$way[$i]]);
     }
-    echo "<br>";
+    echo "<br><br>";
 }
 
 /**
