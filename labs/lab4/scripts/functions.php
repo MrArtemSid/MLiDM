@@ -168,7 +168,7 @@ function find_comps(): void {
     for ($i = 0; $i < sizeof($masOfMas); ++$i) {
         if (!$used[$i]) {
             $comps[] = [];
-            dfs($i, $masOfMas);
+            dfs($i);
         }
         $ans[] = array();
     }
@@ -180,7 +180,6 @@ function find_comps(): void {
         }
         foreach ($comp as $v) {
             $ans[$v] = $tmp;
-            $ans[$v][$v] = 0;
         }
     }
     echo "Матрица достижимости:<br>";
