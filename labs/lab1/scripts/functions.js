@@ -102,7 +102,7 @@ function main()
     {
         document.getElementById('result').innerHTML = "Результат рассчета:<br>"
         document.getElementById('result').innerHTML += unionArray(mas1, mas2, 1) + "<br>"
-        document.getElementById('result').innerHTML += intersectionArray(mas2, mas2) + "<br>"
+        document.getElementById('result').innerHTML += intersectionArray(mas1, mas2) + "<br>"
         let diffAB = diffArray(mas1, mas2, 0)
         let diffBA = diffArray(mas2, mas1, 1)
         mas1 = null
